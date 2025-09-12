@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\Microsoft.SqlServer.Types.160.1000.6\build\net462\Microsoft.SqlServer.Types.props" Condition="Exists('..\packages\Microsoft.SqlServer.Types.160.1000.6\build\net462\Microsoft.SqlServer.Types.props')" />
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{8E12AAB1-DD45-4B03-8CF7-D1664464A135}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>Otgruzka</RootNamespace>
+    <AssemblyName>Otgruzka</AssemblyName>
+    <TargetFrameworkVersion>v4.8.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <Deterministic>true</Deterministic>
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <PublishUrl>F:\DEMO\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <AutorunEnabled>true</AutorunEnabled>
+    <ApplicationRevision>2</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <PublishWizardCompleted>true</PublishWizardCompleted>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestCertificateThumbprint>67086867D70C67A185B42946493D82FFE751BBCB</ManifestCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup>
+    <ManifestKeyFile>Otgruzka_TemporaryKey.pfx</ManifestKeyFile>
+  </PropertyGroup>
+  <PropertyGroup>
+    <GenerateManifests>true</GenerateManifests>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SignManifests>true</SignManifests>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Microsoft.ReportViewer.Design, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.1652.0\lib\net40\Microsoft.ReportViewer.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.ReportViewer.WinForms, Version=15.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.ReportingServices.ReportViewerControl.Winforms.150.1652.0\lib\net40\Microsoft.ReportViewer.WinForms.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.SqlServer.Types, Version=16.0.0.0, Culture=neutral, PublicKeyToken=89845dcd8080cc91, processorArchitecture=MSIL">
+      <HintPath>..\packages\Microsoft.SqlServer.Types.160.1000.6\lib\net462\Microsoft.SqlServer.Types.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Design" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AboutBox1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="AboutBox1.Designer.cs">
+      <DependentUpon>AboutBox1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="dob.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="dob.Designer.cs">
+      <DependentUpon>dob.cs</DependentUpon>
+    </Compile>
+    <Compile Include="DobProd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="DobProd.Designer.cs">
+      <DependentUpon>DobProd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Ekon.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Ekon.Designer.cs">
+      <DependentUpon>Ekon.cs</DependentUpon>
+    </Compile>
+    <Compile Include="enterBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="enterBox.Designer.cs">
+      <DependentUpon>enterBox.cs</DependentUpon>
+    </Compile>
+    <Compile Include="First.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="First.Designer.cs">
+      <DependentUpon>First.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Form1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Form1.Designer.cs">
+      <DependentUpon>Form1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="logo.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="logo.Designer.cs">
+      <DependentUpon>logo.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Nalich.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Nalich.Designer.cs">
+      <DependentUpon>Nalich.cs</DependentUpon>
+    </Compile>
+    <Compile Include="newBDDataSet.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>newBDDataSet.xsd</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="newBDDataSet1.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>newBDDataSet1.xsd</DependentUpon>
+    </Compile>
+    <Compile Include="newPok.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="newPok.Designer.cs">
+      <DependentUpon>newPok.cs</DependentUpon>
+    </Compile>
+    <Compile Include="newPrice.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="newPrice.Designer.cs">
+      <DependentUpon>newPrice.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewPrik.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewPrik.Designer.cs">
+      <DependentUpon>NewPrik.cs</DependentUpon>
+    </Compile>
+    <Compile Include="NewSotr.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="NewSotr.Designer.cs">
+      <DependentUpon>NewSotr.cs</DependentUpon>
+    </Compile>
+    <Compile Include="OtgrProd.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="OtgrProd.Designer.cs">
+      <DependentUpon>OtgrProd.cs</DependentUpon>
+    </Compile>
+    <Compile Include="pass.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="pass.Designer.cs">
+      <DependentUpon>pass.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Plavka.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Plavka.Designer.cs">
+      <DependentUpon>Plavka.cs</DependentUpon>
+    </Compile>
+    <Compile Include="pokupatel.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="pokupatel.Designer.cs">
+      <DependentUpon>pokupatel.cs</DependentUpon>
+    </Compile>
+    <Compile Include="ViewPrik.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ViewPrik.Designer.cs">
+      <DependentUpon>ViewPrik.cs</DependentUpon>
+    </Compile>
+    <Compile Include="PrintPrikaz.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="PrintPrikaz.Designer.cs">
+      <DependentUpon>PrintPrikaz.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Prodazha.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Prodazha.Designer.cs">
+      <DependentUpon>Prodazha.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Repo1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Repo1.Designer.cs">
+      <DependentUpon>Repo1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Repo2.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Repo2.Designer.cs">
+      <DependentUpon>Repo2.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Sotr.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Sotr.Designer.cs">
+      <DependentUpon>Sotr.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="AboutBox1.resx">
+      <DependentUpon>AboutBox1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="dob.resx">
+      <DependentUpon>dob.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="DobProd.resx">
+      <DependentUpon>DobProd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Ekon.resx">
+      <DependentUpon>Ekon.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="enterBox.resx">
+      <DependentUpon>enterBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="First.resx">
+      <DependentUpon>First.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Form1.resx">
+      <DependentUpon>Form1.cs</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </EmbeddedResource>
+    <EmbeddedResource Include="logo.resx">
+      <DependentUpon>logo.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Nalich.resx">
+      <DependentUpon>Nalich.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="newPok.resx">
+      <DependentUpon>newPok.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="newPrice.resx">
+      <DependentUpon>newPrice.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewPrik.resx">
+      <DependentUpon>NewPrik.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="NewSotr.resx">
+      <DependentUpon>NewSotr.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="OtgrProd.resx">
+      <DependentUpon>OtgrProd.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="pass.resx">
+      <DependentUpon>pass.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Plavka.resx">
+      <DependentUpon>Plavka.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="pokupatel.resx">
+      <DependentUpon>pokupatel.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PrintPrik.rdlc" />
+    <EmbeddedResource Include="ViewPrik.resx">
+      <DependentUpon>ViewPrik.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="PrintPrikaz.resx">
+      <DependentUpon>PrintPrikaz.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Prodazha.resx">
+      <DependentUpon>Prodazha.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Repo1.resx">
+      <DependentUpon>Repo1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Repo2.resx">
+      <DependentUpon>Repo2.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Report1.rdlc" />
+    <EmbeddedResource Include="Report3.rdlc" />
+    <EmbeddedResource Include="Report4.rdlc" />
+    <EmbeddedResource Include="Report5.rdlc" />
+    <EmbeddedResource Include="Firms.rdlc" />
+    <EmbeddedResource Include="Sotr1.rdlc" />
+    <EmbeddedResource Include="Sotr.resx">
+      <DependentUpon>Sotr.cs</DependentUpon>
+    </EmbeddedResource>
+    <None Include="newBDDataSet.xsc">
+      <DependentUpon>newBDDataSet.xsd</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <Content Include="newBDDataSet.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>newBDDataSet.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="newBDDataSet.xss">
+      <DependentUpon>newBDDataSet.xsd</DependentUpon>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="newBDDataSet1.xsc">
+      <DependentUpon>newBDDataSet1.xsd</DependentUpon>
+    </None>
+    <None Include="newBDDataSet1.xsd">
+      <Generator>MSDataSetGenerator</Generator>
+      <LastGenOutput>newBDDataSet1.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="newBDDataSet1.xss">
+      <DependentUpon>newBDDataSet1.xsd</DependentUpon>
+    </None>
+    <None Include="Otgruzka_TemporaryKey.pfx" />
+    <None Include="packages.config" />
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.8.1">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.8.1 %28x86 и x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Данный проект ссылается на пакеты NuGet, отсутствующие на этом компьютере. Используйте восстановление пакетов NuGet, чтобы скачать их.  Дополнительную информацию см. по адресу: http://go.microsoft.com/fwlink/?LinkID=322105. Отсутствует следующий файл: {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\Microsoft.SqlServer.Types.160.1000.6\build\net462\Microsoft.SqlServer.Types.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.SqlServer.Types.160.1000.6\build\net462\Microsoft.SqlServer.Types.props'))" />
+  </Target>
+</Project>
