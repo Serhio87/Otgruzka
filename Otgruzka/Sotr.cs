@@ -1,28 +1,16 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.OleDb;
-using System.Data.SqlClient;
 using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.ComponentModel.Design.ObjectSelectorEditor;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Otgruzka
 {
     public partial class Sotr : Form
     {
-        public static string connectString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\\Users\\user\\Desktop\\ДИПЛОМ\\Otgruzka\\Otgruzka\\newBD.accdb";
-        //public static string connectString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=|DataDirectory|newBD.accdb";
-
-        private OleDbConnection myConnection;
         private BindingSource bindingSource = new BindingSource();
         private DataTable db;
         private List<string> fams; // Для хранения фамилий
@@ -30,28 +18,23 @@ namespace Otgruzka
         public Sotr()
         {
             InitializeComponent();
-     //       myConnection = new OleDbConnection(connectString);
-     //       myConnection.Open();
             LoadData();
             InitFams(); // Инициализируем список фамилий
-  //          this.dataGridView1.CellClick += new DataGridViewCellEventHandler(this.dataGridView1_CellClick);
-
         }
 
         private void LoadData()
         {
-            using (OleDbConnection myConnection = new OleDbConnection(connectString))
+            using (OleDbConnection myConnection = new OleDbConnection(Metods.ConnectionString))
             {
                 string query = @"SELECT sotrudniki.tab_nomer AS [Табельный номер],
-                                        sotrudniki.fam AS [Фамилия],
-                                        sotrudniki.im AS [Имя],
-                                        sotrudniki.otch AS [Отчество],
-                                        dolzhnost.dolzhn AS [Должность], 
-                                        sotrudniki.password AS [Пароль]
-                            FROM        dolzhnost 
-                            INNER JOIN  sotrudniki 
-                            ON          dolzhnost.Код = sotrudniki.dolzhn
-                            ORDER BY    sotrudniki.fam;";
+                                        sotrudniki.fam       AS [Фамилия],
+                                        sotrudniki.im        AS [Имя],
+                                        sotrudniki.otch      AS [Отчество],
+                                        dolzhnost.dolzhn     AS [Должность], 
+                                        sotrudniki.password  AS [Пароль]
+                                   FROM dolzhnost INNER JOIN sotrudniki 
+                                     ON dolzhnost.Код = sotrudniki.dolzhn
+                               ORDER BY sotrudniki.fam;";
 
                 OleDbDataAdapter adapter = new OleDbDataAdapter(query, myConnection);
                 db = new DataTable();
@@ -71,8 +54,8 @@ namespace Otgruzka
                 dataGridView1.DefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter;
                 dataGridView1.ColumnHeadersDefaultCellStyle.Alignment = DataGridViewContentAlignment.MiddleCenter; //в заголовке
 
-                // Пример настройки отступов для самого DataGridView
-             //   dataGridView1.Padding = new Padding(0, 50, 0, 100); // 10px слева/справа, 5px сверху/снизу
+                // Скрываем столбцы по умолчанию
+                dataGridView1.Columns["Пароль"].Visible = false;
 
                 dataGridView1.RowHeadersVisible = false;
             }
@@ -113,13 +96,13 @@ namespace Otgruzka
 
         private void DeleteRecord(int tab_nomer)
         {
-            using (OleDbConnection connection = new OleDbConnection(connectString))
+            using (OleDbConnection connection = new OleDbConnection(Metods.ConnectionString))
             {
                 connection.Open();
 
-                using (OleDbCommand command = new OleDbCommand("DELETE FROM sotrudniki WHERE tab_nomer = @tab_nomer", connection))
+                using (OleDbCommand command = new OleDbCommand("DELETE FROM sotrudniki WHERE tab_nomer = ? ", connection))
                 {
-                    command.Parameters.AddWithValue("@tab_nomer", tab_nomer);
+                    command.Parameters.AddWithValue("?", tab_nomer);
                     command.ExecuteNonQuery();
                 }
             }
@@ -130,7 +113,7 @@ namespace Otgruzka
             this.Close();
         }
 
-        private void Data(string columnName, System.Windows.Forms.ComboBox comboBox)
+        private void Data(string columnName, ComboBox comboBox)
         {
             var uniqueValues = db.AsEnumerable()
                          .Select(row => row.Field<object>(columnName)?.ToString())
@@ -146,20 +129,15 @@ namespace Otgruzka
             {
                 comboBox.Items.Add(value);
             }
-
-            comboBox.SelectedIndexChanged += FilterDGV; // Подписываемся на событие изменения выбора
+            comboBox.SelectedIndexChanged += Filter; // Подписываемся на событие изменения выбора
         }
 
-        private void FilterDGV(object sender, EventArgs e)
+        private void Filter(object sender, EventArgs e)
         {
             string filter = "";
             // Проверяем каждое значение комбобокса и формируем строку фильтра
-            if (comboBox1.SelectedItem != null && comboBox1.SelectedItem.ToString() != "Все")
+            if (comboBox1.SelectedItem != null && comboBox1.SelectedItem.ToString() != "")
                 filter += $"[Должность] = '{comboBox1.SelectedItem}'";
-
-            // Убираем последний AND, если он есть
-            if (filter.EndsWith(" AND "))
-                filter = filter.Substring(0, filter.Length - 5);
 
             // Применяем фильтр к DataGridView
             (dataGridView1.DataSource as DataTable).DefaultView.RowFilter = filter;
@@ -167,6 +145,9 @@ namespace Otgruzka
 
         private void DataUpdated()
         {
+            panel4.Visible = false;
+            panel3.Visible = false;
+            panel5.Visible = false;
             comboBox1.Visible = false;
             textBox1.Visible = false;
             textBox2.Visible = false;
@@ -182,9 +163,11 @@ namespace Otgruzka
             // Проверяем, выбрана ли строка
             if (dataGridView1.SelectedRows.Count > 0)
             {
-                // Получаем tab_nomer
-                int selectedRowIndex = dataGridView1.SelectedRows[0].Index;
-                int tab_nomer = Convert.ToInt32(dataGridView1.Rows[selectedRowIndex].Cells["Табельный номер"].Value);
+                // Получаем ссылку на первую выделенную строку
+                DataGridViewRow selectedRow = dataGridView1.SelectedRows[0];
+                // Получаем tab_nomer и фамилию
+                int tab_nomer = Convert.ToInt32(selectedRow.Cells["Табельный номер"].Value);
+                string fam = selectedRow.Cells["Фамилия"].Value.ToString();
 
                 using (OpenFileDialog openFileDialog = new OpenFileDialog())
                 {
@@ -196,24 +179,40 @@ namespace Otgruzka
                         // Получаем расширение файла
                         string extension = Path.GetExtension(imagePath);
                         // Копируем изображение в целевую директорию
-                        string directory = @"C:\Users\user\Desktop\ДИПЛОМ\Otgruzka\Sotr";
-                        string FilePath = Path.Combine(directory, $"{tab_nomer}{extension}"); //табельный номер как имя файла
+                        string directory = Metods.DirectoryPhoto;
+                        string FilePath = Path.Combine(directory, $"{tab_nomer}-{fam}{extension}"); //табельный номер как имя файла
+
+                        if (pictureBox1 != null && pictureBox1.Image != null)
+                        {
+                            // Освобождаем ресурсы изображения
+                            pictureBox1.Image.Dispose();
+                            // Очищаем PictureBox
+                            pictureBox1.Image = null;
+                        }
 
                         // Если файл уже существует, можно переименовать его или перезаписать
                         if (File.Exists(FilePath))
                         {
-                            File.Delete(FilePath); // Удаляем существующий файл
+                            try
+                            {
+                                File.Delete(FilePath); // Удаляем существующий файл
+                            }
+                            catch (IOException ex)
+                            {
+                                MessageBox.Show($"Не удалось удалить файл: {ex.Message}");
+                                return; // Прерываем операцию, если удаление не удалось
+                            }
                         }
                         File.Copy(imagePath, FilePath); // Копируем файл
 
-                        using (OleDbConnection myConnection = new OleDbConnection(connectString))
+                        using (OleDbConnection myConnection = new OleDbConnection(Metods.ConnectionString))
                         {
                             myConnection.Open();
 
                             try
                             {
                                 // Обновление фото
-                                string query = @"UPDATE sotrudniki SET [photo] = ? WHERE tab_nomer = ?";
+                                string query = @"UPDATE sotrudniki SET photo = ? WHERE tab_nomer = ?";
 
                                 using (OleDbCommand command = new OleDbCommand(query, myConnection))
                                 {
@@ -233,11 +232,6 @@ namespace Otgruzka
             }
         }
 
-        private void Sotr_FormClosing(object sender, FormClosingEventArgs e)
-        {
-    //        myConnection.Close();
-        }
-
         private string SearchOption = "";
 
         private void button4_Click(object sender, EventArgs e)
@@ -253,24 +247,22 @@ namespace Otgruzka
                 textBox1.Clear();
             }
         }
-        
+
         private void SearchTab()
         {
-            myConnection = new OleDbConnection(connectString);
+            OleDbConnection myConnection = new OleDbConnection(Metods.ConnectionString);
             myConnection.Open();
             if (int.TryParse(textBox2.Text, out int tab))
             {
-                string query = @"SELECT     sotrudniki.tab_nomer AS [Табельный номер],
-                                        sotrudniki.fam AS [Фамилия],
-                                        sotrudniki.im AS [Имя],
-                                        sotrudniki.otch AS [Отчество],
-                                        dolzhnost.dolzhn AS [Должность], 
-                                        sotrudniki.password AS [Пароль]
-                            FROM        dolzhnost 
-                            INNER JOIN  sotrudniki 
-                            ON          dolzhnost.Код = sotrudniki.dolzhn
-                            WHERE tab_nomer LIKE " + "'%" + tab + "%';";
-                //       string query = "SELECT * FROM sotrudniki WHERE fam LIKE " + "'%" + tab + "%'";
+                string query = @"SELECT sotrudniki.tab_nomer AS [Табельный номер],
+                                        sotrudniki.fam       AS [Фамилия],
+                                        sotrudniki.im        AS [Имя],
+                                        sotrudniki.otch      AS [Отчество],
+                                        dolzhnost.dolzhn     AS [Должность], 
+                                        sotrudniki.password  AS [Пароль]
+                                   FROM dolzhnost INNER JOIN sotrudniki ON dolzhnost.Код = sotrudniki.dolzhn
+                                  WHERE tab_nomer LIKE " + "'%" + tab + "%';";
+
                 OleDbDataAdapter command = new OleDbDataAdapter(query, myConnection);
                 DataTable db = new DataTable();
                 command.Fill(db);
@@ -285,25 +277,24 @@ namespace Otgruzka
 
         private void SearchFam()
         {
-            myConnection = new OleDbConnection(connectString);
+            OleDbConnection myConnection = new OleDbConnection(Metods.ConnectionString);
             myConnection.Open();
 
             string fam = textBox1.Text;
-            string query = @"SELECT     sotrudniki.tab_nomer AS [Табельный номер],
-                                        sotrudniki.fam AS [Фамилия],
-                                        sotrudniki.im AS [Имя],
-                                        sotrudniki.otch AS [Отчество],
-                                        dolzhnost.dolzhn AS [Должность], 
-                                        sotrudniki.password AS [Пароль]
-                            FROM        dolzhnost 
-                            INNER JOIN  sotrudniki 
-                            ON          dolzhnost.Код = sotrudniki.dolzhn
-                            WHERE fam LIKE " + "'%" + fam + "%';";
+            string query = @"SELECT sotrudniki.tab_nomer AS [Табельный номер],
+                                    sotrudniki.fam       AS [Фамилия],
+                                    sotrudniki.im        AS [Имя],
+                                    sotrudniki.otch      AS [Отчество],
+                                    dolzhnost.dolzhn     AS [Должность], 
+                                    sotrudniki.password  AS [Пароль]
+                               FROM dolzhnost INNER JOIN sotrudniki ON dolzhnost.Код = sotrudniki.dolzhn
+                              WHERE fam LIKE " + "'%" + fam + "%';";
+
             OleDbDataAdapter command = new OleDbDataAdapter(query, myConnection);
             DataTable db = new DataTable();
             command.Fill(db);
             dataGridView1.DataSource = db;
-            
+
             myConnection.Close();
         }
 
@@ -349,39 +340,32 @@ namespace Otgruzka
 
         private void button_tab_Click(object sender, EventArgs e)
         {
+            DataUpdated();
             panel4.Visible = true;
-            textBox1.Visible = false;
-            listBox1.Visible = false;
-            comboBox1.Visible = false;
             textBox2.Visible = true;
             button4.Visible = true;
-            LoadData();
             SearchOption = "Tab";
+            textBox2.Focus();
         }
 
         private void button_fam_Click(object sender, EventArgs e)
         {
+            DataUpdated();
             panel3.Visible = true;
-            textBox2.Visible = false;
-            comboBox1.Visible = false;
             textBox1.Visible = true;
             button4.Visible = true;
-            LoadData();
             SearchOption = "Fam";
+            textBox1.Focus();
         }
 
         private void button_dol_Click(object sender, EventArgs e)
         {
+            DataUpdated();
             panel5.Visible = true;
             comboBox1.Visible = true;
-            textBox1.Visible = false;
-            listBox1.Visible = false;
-            textBox2.Visible = false;
-            button4.Visible = false;
-            LoadData();
             Data("Должность", comboBox1);
-         //   SearchOption = "Dol";
-            FilterDGV(sender, e);
+            Filter(sender, e);
+            comboBox1.Focus();
         }
 
         private void обновитьToolStripMenuItem_Click(object sender, EventArgs e)
@@ -407,7 +391,7 @@ namespace Otgruzka
 
                 try
                 {
-                    using (OleDbConnection myConnection = new OleDbConnection(connectString))
+                    using (OleDbConnection myConnection = new OleDbConnection(Metods.ConnectionString))
                     {
                         myConnection.Open();
                         string query = "SELECT photo FROM sotrudniki WHERE tab_nomer = ?";
@@ -421,7 +405,7 @@ namespace Otgruzka
                                 if (!myReader.IsDBNull(myReader.GetOrdinal("photo")))
                                 {
                                     string PhotoPath = myReader.GetString(myReader.GetOrdinal("photo"));
-                                    string photoDirectory = @"C:UsersuserDesktop\ДИПЛОМOtgruzkaSotr";
+                                    string photoDirectory = Metods.DirectoryPhoto;
                                     string fullPhotoPath = Path.Combine(photoDirectory, PhotoPath);
 
                                     if (File.Exists(fullPhotoPath))

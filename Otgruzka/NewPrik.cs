@@ -1,36 +1,21 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.Common;
 using System.Data.OleDb;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.UI.WebControls;
 using System.Windows.Forms;
-using static System.Windows.Forms.LinkLabel;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Otgruzka
 {
-    public partial class NewPrik: Form
+    public partial class NewPrik : Form
     {
-        //public static string connectString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=|DataDirectory|newBD.accdb";
-        public static string connectString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\\Users\\user\\Desktop\\ДИПЛОМ\\Otgruzka\\Otgruzka\\newBD.accdb";
-
-        private int selectedKod; //код покуп
-        private int kodPr;
-        private int kodDl; 
-        private string kodKl;
         private int tab_n;
+        private Metods metods = new Metods();
+
 
         public NewPrik(int tab_nomer)
         {
             InitializeComponent();
             LoadPokup();
             LoadProd();
+            LoadPost();
 
             tab_n = tab_nomer;
             FIO(tab_n);
@@ -50,109 +35,90 @@ namespace Otgruzka
                 return $"{Nazvanie,-10} | {Gorod,-10} -- {Strana,-10}"; // -20 и -15 для выравнивания влево
             }
         }
- 
+
+        private class Post
+        {
+            public string post { get; set; }
+            public string usl_post { get; set; }
+
+            public override string ToString()
+            {
+                return $"{post,-5} - {usl_post,-5} ";
+            }
+        }
+
         private void LoadPokup()
         {
-            using (OleDbConnection myConnection = new OleDbConnection(connectString))
+            string query = "SELECT Код, nazvanie, gorod, strana FROM pokupatel";
+            Metods.LoadCombo(query, comboBox1, reader =>
+            new Pokup
             {
-                myConnection.Open();
-                string query = "SELECT Код, nazvanie, gorod, strana FROM pokupatel"; // Запрос на получение названий 
-                using (OleDbCommand command = new OleDbCommand(query, myConnection))
-                {
-                    using (OleDbDataReader reader = command.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            Pokup pokup = new Pokup
-                            {
-                                Код = Convert.ToInt32(reader["Код"]),
-                                Nazvanie = reader["nazvanie"].ToString(),
-                                Gorod = reader["gorod"].ToString(),
-                                Strana = reader["strana"].ToString()
-                            };
-                            comboBox1.Items.Add(pokup); // Добавляем названия в ComboBox
-                        }
-                    }
-                }
-            }
+                Код = Convert.ToInt32(reader["Код"]),
+                Nazvanie = reader["nazvanie"].ToString(),
+                Gorod = reader["gorod"].ToString(),
+                Strana = reader["strana"].ToString()
+            });
+        }
+
+        private void LoadPost()
+        {
+            string query = "SELECT post, usl_post FROM postavka";
+            Metods.LoadCombo(query, comboBox2, reader =>
+            new Post
+            {
+                post = reader["post"].ToString(),
+                usl_post = reader["usl_post"].ToString()
+            });
         }
 
         private void LoadProd()
         {
-            using (OleDbConnection connection = new OleDbConnection(connectString))
-            {
-                connection.Open();
+            string queryPr = "SELECT profil FROM profil";
+            string queryDl = "SELECT dlina FROM dlina";
+            string queryKl = "SELECT marka FROM klass";
 
-                string queryPr = "SELECT profil FROM profil";
-                string queryDl = "SELECT dlina FROM dlina";
-                string queryKl = "SELECT marka FROM klass";
-
-                using (OleDbCommand command = new OleDbCommand(queryPr, connection))
-                {
-                    OleDbDataReader reader = command.ExecuteReader();
-
-                    while (reader.Read())
-                    {
-                        comboBoxProf.Items.Add(reader["profil"]);
-                    }
-                    reader.Close();
-                }
-
-                using (OleDbCommand command = new OleDbCommand(queryDl, connection))
-                {
-                    OleDbDataReader reader = command.ExecuteReader();
-
-                    while (reader.Read())
-                    {
-                        comboBoxDl.Items.Add(reader["dlina"]);
-                    }
-                    reader.Close();
-                }
-
-                using (OleDbCommand command = new OleDbCommand(queryKl, connection))
-                {
-                    OleDbDataReader reader = command.ExecuteReader();
-
-                    while (reader.Read())
-                    {
-                        comboBoxCl.Items.Add(reader["marka"]);
-                    }
-                    reader.Close();
-                }
-            }
+            Metods.LoadComboBoxData(queryPr, comboBoxProf);
+            Metods.LoadComboBoxData(queryDl, comboBoxDl);
+            Metods.LoadComboBoxData(queryKl, comboBoxCl);
         }
 
         private void FIO(int tab_n)
         {
-            using (OleDbConnection conn = new OleDbConnection(connectString))
+            // Вызываем новый метод, который возвращает кортеж (Tuple)
+            Tuple<string, string> result = metods.GetFIO(tab_n);
+            if (result == null) // Проверяем на null (ошибку)
             {
-                conn.Open();
-                string query = @"SELECT tab_nomer, fam, im, otch 
-                            FROM sotrudniki 
-                            WHERE tab_nomer = @tab_n;";
-                OleDbCommand command = new OleDbCommand(query, conn);
-                command.Parameters.AddWithValue("@tab_n", tab_n);
-
-                using (OleDbDataReader reader = command.ExecuteReader())
-                {
-                    if (reader.Read()) //проверка есть ли результаты
-                    {
-                        
-                        string fam = reader["fam"].ToString();
-                        string im = reader["im"].ToString();
-                        string otch = reader["otch"].ToString();
-                        textBox2.Text = $"{fam} {im} {otch}";
-                    }
-                    else { MessageBox.Show("ошибка"); }
-                }
+                MessageBox.Show("Ошибка: нет данных или сотрудник не найден.");
+            }
+            else
+            {
+                textBox2.Text = result.Item2; // Item2 содержит "Фамилия Имя Отчество"
             }
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            this.Close();
-            NewPrik np = new NewPrik(tab_n);
-            np.Show();
+            UpdateData();
+        }
+
+        private void UpdateData()
+        {
+            comboBox1.Items.Clear();
+            comboBox1.Text = "";
+            comboBox2.Items.Clear();
+            comboBox2.Text = "";
+            comboBoxProf.Items.Clear();
+            comboBoxProf.Text = "";
+            comboBoxDl.Items.Clear();
+            comboBoxDl.Text = "";
+            comboBoxCl.Items.Clear();
+            comboBoxCl.Text = "";
+
+            textBoxVes.Clear();
+
+            LoadPokup();
+            LoadProd();
+            LoadPost();
         }
 
         private void button4_Click(object sender, EventArgs e)
@@ -160,33 +126,9 @@ namespace Otgruzka
             this.Close();
         }
 
-        private void comboBoxProf_SelectedIndexChanged(object sender, EventArgs e)
-        {
-                kodPr = Convert.ToInt32(comboBoxProf.SelectedItem); // Код профиля
-        }
-
-        private void comboBoxDl_SelectedIndexChanged(object sender, EventArgs e)
-        {
-                kodDl = Convert.ToInt32(comboBoxDl.SelectedItem); 
-        }
-
-        private void comboBoxCl_SelectedIndexChanged(object sender, EventArgs e)
-        {
-                kodKl = Convert.ToString(comboBoxCl.SelectedItem); 
-        }
-
-        private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            Pokup select = (Pokup)comboBox1.SelectedItem;
-            if (select != null)
-            {
-                selectedKod = select.Код;
-            }
-        }
-
         private void button2_Click(object sender, EventArgs e)
         {
-            using (OleDbConnection myConnection = new OleDbConnection(connectString))
+            using (OleDbConnection myConnection = new OleDbConnection(Metods.ConnectionString))
             {
                 myConnection.Open();
 
@@ -194,59 +136,76 @@ namespace Otgruzka
                 {
                     if (comboBox1.SelectedItem == null)
                     {
-                        MessageBox.Show("Пожалуйста, выберите покупателя.");
+                        MessageBox.Show("Пожалуйста, выберите покупателя.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-                    int pokup = selectedKod;
+                    Pokup selectedPokup = (Pokup)comboBox1.SelectedItem;
+                    int pokup = selectedPokup.Код;
+
+                    if (comboBox2.SelectedItem == null)
+                    {
+                        MessageBox.Show("Пожалуйста, выберите условие поставки.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+                    Post selectedPost = (Post)comboBox2.SelectedItem;
+                    string post = selectedPost.post; 
 
                     if (comboBoxProf.SelectedItem == null)
                     {
-                        MessageBox.Show("Пожалуйста, заполните данные продукции.");
+                        MessageBox.Show("Пожалуйста, заполните данные продукции.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-                    int prof = kodPr;
+                    int prof = Convert.ToInt32(comboBoxProf.SelectedItem);
 
                     if (comboBoxDl.SelectedItem == null)
                     {
-                        MessageBox.Show("Пожалуйста, заполните данные продукции.");
+                        MessageBox.Show("Пожалуйста, заполните данные продукции.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-                    int dlina = kodDl;
+                    int dlina = Convert.ToInt32(comboBoxDl.SelectedItem);
 
                     if (comboBoxCl.SelectedItem == null)
                     {
-                        MessageBox.Show("Пожалуйста, заполните данные продукции.");
+                        MessageBox.Show("Пожалуйста, заполните данные продукции.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-                    string klass = kodKl;
+                    string klass = comboBoxCl.SelectedItem.ToString();
 
                     string date_prik = dateTimePicker1.Value.ToShortDateString();
-                    
+
                     int ekon = tab_n;
 
-                    int ves = Convert.ToInt32(textBoxVes.Text);
-                
+                    int ves;
+                    if (string.IsNullOrWhiteSpace(textBoxVes.Text) || !int.TryParse(textBoxVes.Text, out ves))
+                    {
+                        MessageBox.Show("Введите требуемый объем поставки.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
+
+                    Console.WriteLine($"pokup: {pokup}, prof: {prof}, dlina: {dlina}, klass: {klass}, ves: {ves}, date_prik: {date_prik}, ekon: {ekon}, post: {post}");
+
                     // Запрос INSERT
-                    string query = @"INSERT INTO Prikaz (pokup, prof, dlina, klass, ves, date_prik, ekon)
-                                                   VALUES (@pokup, @profil, @dlina, @klass, @ves, @date_prik, @ekon);";
-                    
-                //    string query = @"INSERT INTO Prikaz ( pokup, profil, dlina, klass, ves, date_prik )
-                //                SELECT Prikaz.pokup, Prikaz.profil, Prikaz.dlina, Prikaz.klass, Prikaz.ves, Prikaz.date_prik
-               //                 FROM Prikaz;";
+                    string query = @"INSERT INTO Prikaz (pokup, prof, dlina, klass, ves, date_prik, ekon, usl_post)
+                                     VALUES (?, ?, ?, ?, ?, ?, ?, ?);";
 
                     using (OleDbCommand command = new OleDbCommand(query, myConnection))
                     {
                         // Добавление параметров
-                        command.Parameters.AddWithValue("@pokup", pokup);
-                        command.Parameters.AddWithValue("@prof", prof);
-                        command.Parameters.AddWithValue("@dlina", dlina);
-                        command.Parameters.AddWithValue("@klass", klass);
-                        command.Parameters.AddWithValue("@ves", ves);
-                        command.Parameters.AddWithValue("@date_prik", date_prik);
-                        command.Parameters.AddWithValue("@ekon", ekon);
+                        command.Parameters.AddWithValue("?", pokup);
+                        command.Parameters.AddWithValue("?", prof);
+                        command.Parameters.AddWithValue("?", dlina);
+                        command.Parameters.AddWithValue("?", klass);
+                        command.Parameters.AddWithValue("?", ves);
+                        command.Parameters.AddWithValue("?", date_prik);
+                        command.Parameters.AddWithValue("?", ekon);
+                        command.Parameters.AddWithValue("?", post);
 
                         command.ExecuteNonQuery();
-                        MessageBox.Show("Приказ создан!");
+
+                        // Получение последнего вставленного идентификатора
+                        command.CommandText = "SELECT @@IDENTITY";
+                        int Id = Convert.ToInt32(command.ExecuteScalar());
+                        MessageBox.Show($"Приказ создан! Номер приказа: {Id}", "", MessageBoxButtons.OK, MessageBoxIcon.Information);
                     }
                 }
                 catch (Exception ex)
@@ -254,9 +213,7 @@ namespace Otgruzka
                     MessageBox.Show("Ошибка: " + ex.Message);
                 }
             }
-            this.Close();
-            NewPrik np = new NewPrik(tab_n);
-            np.Show();
+            UpdateData();
         }
 
         private void button3_Click(object sender, EventArgs e)

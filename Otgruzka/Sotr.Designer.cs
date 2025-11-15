@@ -331,6 +331,7 @@
             // panel2
             // 
             this.panel2.Controls.Add(this.panel5);
+            this.panel2.Controls.Add(this.panel3);
             this.panel2.Controls.Add(this.panel4);
             this.panel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel2.Location = new System.Drawing.Point(302, 3);
@@ -351,7 +352,6 @@
             // panel4
             // 
             this.panel4.Controls.Add(this.textBox2);
-            this.panel4.Controls.Add(this.panel3);
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel4.Location = new System.Drawing.Point(0, 0);
             this.panel4.Name = "panel4";
@@ -415,7 +415,6 @@
             this.Name = "Sotr";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Сотрудники";
-            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Sotr_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).EndInit();
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();

@@ -1,81 +1,76 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Data.OleDb;
-using System.Drawing;
-using System.IO.Pipes;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Otgruzka
 {
     public partial class pass : Form
     {
-        public static string connectString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\\Users\\user\\Desktop\\ДИПЛОМ\\Otgruzka\\Otgruzka\\newBD.accdb";
-        //public static string connectString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=|DataDirectory|newBD.accdb";
+        private Metods hashPass = new Metods(); // Создаем экземпляр класса HashPass
+        private int tab_nom;
 
-        private int tab_nom; 
-
-        public pass(int tab_n) 
+        public pass(int tab_n)
         {
             InitializeComponent();
-            tab_nom = Convert.ToInt32(tab_n); 
+            tab_nom = tab_n;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            int pass; 
-            int new_pass;
-            int new_pass1;
+            string pass = textBox1.Text;
+            string new_pass = textBox2.Text;
+            string new_pass1 = textBox3.Text;
 
-            // Проверяем, что введенные значения можно преобразовать в int
-            if (!int.TryParse(textBox1.Text, out pass) ||
-                !int.TryParse(textBox2.Text, out new_pass) ||
-                !int.TryParse(textBox3.Text, out new_pass1))
+            // Проверяем, что пароли не пустые
+            if (string.IsNullOrWhiteSpace(pass) || string.IsNullOrWhiteSpace(new_pass) || string.IsNullOrWhiteSpace(new_pass1))
             {
-                MessageBox.Show("Пароль - целое число.");
+                MessageBox.Show("Пароль не может быть пустым.");
+                return;
+            }
+            if (new_pass != new_pass1)
+            {
+                MessageBox.Show("Новые пароли не совпадают.");
                 return;
             }
 
-            using (OleDbConnection myConnection = new OleDbConnection(connectString))
+            using (OleDbConnection conn = new OleDbConnection(Metods.ConnectionString))
             {
-                myConnection.Open();
+                conn.Open();
 
                 try
                 {
                     // Запрос для проверки текущего пароля
                     string query = @"SELECT password FROM sotrudniki WHERE tab_nomer = ?";
-                    using (OleDbCommand command = new OleDbCommand(query, myConnection))
+
+                    using (OleDbCommand command = new OleDbCommand(query, conn))
                     {
-                        command.Parameters.AddWithValue("?", tab_nom); 
+                        command.Parameters.AddWithValue("?", tab_nom);
                         OleDbDataAdapter adapter = new OleDbDataAdapter(command);
                         DataTable db = new DataTable();
                         adapter.Fill(db);
 
                         if (db.Rows.Count > 0)
                         {
-                            DataRow row = db.Rows[0];
-                            int storedPassword = Convert.ToInt32(row["password"]); // Приводим к int
+                            string storedHash = db.Rows[0]["password"].ToString(); // Получаем хеш
 
                             // Проверка введенного пароля
-                            if (pass == storedPassword && new_pass == new_pass1)
+                            if (hashPass.VerifyPassword(pass, storedHash))
                             {
                                 // Обновление пароля
+                                string newHash = hashPass.HashPassword(new_pass);
                                 string query1 = @"UPDATE sotrudniki SET [password] = ? WHERE tab_nomer = ?";
-                                using (OleDbCommand command1 = new OleDbCommand(query1, myConnection))
+                                using (OleDbCommand command1 = new OleDbCommand(query1, conn))
                                 {
-                                    command1.Parameters.AddWithValue("?", new_pass); // Новый пароль
-                                    command1.Parameters.AddWithValue("?", tab_nom);  // Табельный номер
+                                    command1.Parameters.AddWithValue("?", newHash);
+                                    command1.Parameters.AddWithValue("?", tab_nom);
                                     command1.ExecuteNonQuery();
                                     MessageBox.Show("Пароль успешно изменен!");
                                 }
                             }
                             else
                             {
-                                MessageBox.Show("Неверный текущий пароль или пароли не совпадают.");
+                                MessageBox.Show("Неверный текущий пароль.");
                             }
                         }
                         else
@@ -87,22 +82,15 @@ namespace Otgruzka
                 catch (Exception ex)
                 {
                     MessageBox.Show("Ошибка: " + ex.Message);
+                    Console.WriteLine("Ошибка: " + ex.Message);
                 }
             }
             this.Close();
         }
+
         private void button2_Click(object sender, EventArgs e)
         {
             this.Close();
-        }
-        
-        private void textBox3_KeyDown_1(object sender, KeyEventArgs e)
-        {
-            if (e.KeyCode == Keys.Enter)
-            {
-                button1.PerformClick();
-                e.SuppressKeyPress = true; // Предотвращаем звуковой сигнал при нажатии Enter
-            }
         }
     }
 }

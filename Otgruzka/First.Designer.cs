@@ -35,23 +35,24 @@
             this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton6 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton9 = new System.Windows.Forms.ToolStripButton();
+            this.toolStripButton10 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
-            this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton7 = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton8 = new System.Windows.Forms.ToolStripButton();
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
-            this.обновитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.изменитьШрифтToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.сменитьПарольToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.вToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.оПрограммеToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.выходToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ОбновитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ПрикНаОтгрToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ИзмШрифтToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.СмПарольToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ВыйтиToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ОпрогрToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ВыходToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.fontDialog1 = new System.Windows.Forms.FontDialog();
             this.label1 = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
-            this.приказыНаОтгрузкуToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -68,7 +69,8 @@
             this.toolStripButton2,
             this.toolStripButton6,
             this.toolStripButton1,
-            this.toolStripButton3,
+            this.toolStripButton9,
+            this.toolStripButton10,
             this.toolStripButton4,
             this.toolStripButton7,
             this.toolStripButton8});
@@ -76,7 +78,7 @@
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Padding = new System.Windows.Forms.Padding(3, 1, 0, 1);
             this.toolStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.toolStrip1.Size = new System.Drawing.Size(121, 926);
+            this.toolStrip1.Size = new System.Drawing.Size(121, 957);
             this.toolStrip1.TabIndex = 0;
             this.toolStrip1.Text = "toolStrip1";
             // 
@@ -90,6 +92,7 @@
             this.toolStripButton5.Text = "Наличие подробно";
             this.toolStripButton5.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.toolStripButton5.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.toolStripButton5.ToolTipText = "Подробное отображение наличия металла";
             this.toolStripButton5.Click += new System.EventHandler(this.toolStripButton5_Click);
             // 
             // toolStripButton2
@@ -104,7 +107,7 @@
             this.toolStripButton2.Text = "Потребители";
             this.toolStripButton2.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.toolStripButton2.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.toolStripButton2.ToolTipText = "Покупатели";
+            this.toolStripButton2.ToolTipText = "Перечень покупателей";
             this.toolStripButton2.Click += new System.EventHandler(this.toolStripButton2_Click);
             // 
             // toolStripButton6
@@ -115,6 +118,7 @@
             this.toolStripButton6.Size = new System.Drawing.Size(114, 99);
             this.toolStripButton6.Text = "Продажа";
             this.toolStripButton6.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.toolStripButton6.ToolTipText = "Оформление отгружаемой продукции";
             this.toolStripButton6.Click += new System.EventHandler(this.toolStripButton6_Click);
             // 
             // toolStripButton1
@@ -129,7 +133,30 @@
             this.toolStripButton1.Text = "Персонал";
             this.toolStripButton1.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.toolStripButton1.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.toolStripButton1.ToolTipText = "Управление сотрудниками";
             this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            // 
+            // toolStripButton9
+            // 
+            this.toolStripButton9.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton9.Image")));
+            this.toolStripButton9.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton9.Name = "toolStripButton9";
+            this.toolStripButton9.Size = new System.Drawing.Size(114, 99);
+            this.toolStripButton9.Text = "Изменить цену";
+            this.toolStripButton9.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.toolStripButton9.ToolTipText = "Изменить цену погонного метра";
+            this.toolStripButton9.Click += new System.EventHandler(this.toolStripButton9_Click);
+            // 
+            // toolStripButton10
+            // 
+            this.toolStripButton10.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton10.Image")));
+            this.toolStripButton10.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton10.Name = "toolStripButton10";
+            this.toolStripButton10.Size = new System.Drawing.Size(114, 99);
+            this.toolStripButton10.Text = "Печать накладной";
+            this.toolStripButton10.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.toolStripButton10.ToolTipText = "Печать тоарнотранспортной накладной";
+            this.toolStripButton10.Click += new System.EventHandler(this.toolStripButton10_Click);
             // 
             // toolStripButton4
             // 
@@ -141,21 +168,8 @@
             this.toolStripButton4.Text = "Добавить на склад";
             this.toolStripButton4.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
             this.toolStripButton4.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.toolStripButton4.ToolTipText = "Приём продукции на склад";
             this.toolStripButton4.Click += new System.EventHandler(this.toolStripButton4_Click);
-            // 
-            // toolStripButton3
-            // 
-            this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
-            this.toolStripButton3.ImageAlign = System.Drawing.ContentAlignment.TopCenter;
-            this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton3.Margin = new System.Windows.Forms.Padding(2);
-            this.toolStripButton3.Name = "toolStripButton3";
-            this.toolStripButton3.Size = new System.Drawing.Size(110, 99);
-            this.toolStripButton3.Text = "Отчёты";
-            this.toolStripButton3.TextAlign = System.Drawing.ContentAlignment.BottomCenter;
-            this.toolStripButton3.TextDirection = System.Windows.Forms.ToolStripTextDirection.Horizontal;
-            this.toolStripButton3.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
-            this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
             // 
             // toolStripButton7
             // 
@@ -165,6 +179,7 @@
             this.toolStripButton7.Size = new System.Drawing.Size(114, 99);
             this.toolStripButton7.Text = "Новый приказ";
             this.toolStripButton7.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.toolStripButton7.ToolTipText = "Создать новый приказ на отгрузку";
             this.toolStripButton7.Click += new System.EventHandler(this.toolStripButton7_Click);
             // 
             // toolStripButton8
@@ -175,66 +190,75 @@
             this.toolStripButton8.Size = new System.Drawing.Size(114, 99);
             this.toolStripButton8.Text = "Инвентаризация";
             this.toolStripButton8.TextImageRelation = System.Windows.Forms.TextImageRelation.ImageAboveText;
+            this.toolStripButton8.ToolTipText = "Инвентаризация склада";
+            this.toolStripButton8.Click += new System.EventHandler(this.toolStripButton8_Click);
             // 
             // menuStrip1
             // 
             this.menuStrip1.BackColor = System.Drawing.SystemColors.ButtonShadow;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.обновитьToolStripMenuItem,
-            this.приказыНаОтгрузкуToolStripMenuItem,
-            this.изменитьШрифтToolStripMenuItem,
-            this.сменитьПарольToolStripMenuItem,
-            this.вToolStripMenuItem,
-            this.оПрограммеToolStripMenuItem,
-            this.выходToolStripMenuItem});
+            this.ОбновитьToolStripMenuItem,
+            this.ПрикНаОтгрToolStripMenuItem,
+            this.ИзмШрифтToolStripMenuItem,
+            this.СмПарольToolStripMenuItem,
+            this.ВыйтиToolStripMenuItem,
+            this.ОпрогрToolStripMenuItem,
+            this.ВыходToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Margin = new System.Windows.Forms.Padding(1);
             this.menuStrip1.Name = "menuStrip1";
-            this.menuStrip1.Size = new System.Drawing.Size(970, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(1184, 24);
             this.menuStrip1.TabIndex = 1;
             this.menuStrip1.Text = "menuStrip1";
             // 
-            // обновитьToolStripMenuItem
+            // ОбновитьToolStripMenuItem
             // 
-            this.обновитьToolStripMenuItem.Name = "обновитьToolStripMenuItem";
-            this.обновитьToolStripMenuItem.Size = new System.Drawing.Size(73, 20);
-            this.обновитьToolStripMenuItem.Text = "Обновить";
-            this.обновитьToolStripMenuItem.Click += new System.EventHandler(this.обновитьToolStripMenuItem_Click);
+            this.ОбновитьToolStripMenuItem.Name = "ОбновитьToolStripMenuItem";
+            this.ОбновитьToolStripMenuItem.Size = new System.Drawing.Size(73, 20);
+            this.ОбновитьToolStripMenuItem.Text = "Обновить";
+            this.ОбновитьToolStripMenuItem.Click += new System.EventHandler(this.обновитьToolStripMenuItem_Click);
             // 
-            // изменитьШрифтToolStripMenuItem
+            // ПрикНаОтгрToolStripMenuItem
             // 
-            this.изменитьШрифтToolStripMenuItem.Name = "изменитьШрифтToolStripMenuItem";
-            this.изменитьШрифтToolStripMenuItem.Size = new System.Drawing.Size(115, 20);
-            this.изменитьШрифтToolStripMenuItem.Text = "Изменить шрифт";
-            this.изменитьШрифтToolStripMenuItem.Click += new System.EventHandler(this.изменитьШрифтToolStripMenuItem_Click);
+            this.ПрикНаОтгрToolStripMenuItem.Name = "ПрикНаОтгрToolStripMenuItem";
+            this.ПрикНаОтгрToolStripMenuItem.Size = new System.Drawing.Size(134, 20);
+            this.ПрикНаОтгрToolStripMenuItem.Text = "Приказы на отгрузку";
+            this.ПрикНаОтгрToolStripMenuItem.Click += new System.EventHandler(this.приказыНаОтгрузкуToolStripMenuItem_Click);
             // 
-            // сменитьПарольToolStripMenuItem
+            // ИзмШрифтToolStripMenuItem
             // 
-            this.сменитьПарольToolStripMenuItem.Name = "сменитьПарольToolStripMenuItem";
-            this.сменитьПарольToolStripMenuItem.Size = new System.Drawing.Size(110, 20);
-            this.сменитьПарольToolStripMenuItem.Text = "Сменить пароль";
-            this.сменитьПарольToolStripMenuItem.Click += new System.EventHandler(this.сменитьПарольToolStripMenuItem_Click);
+            this.ИзмШрифтToolStripMenuItem.Name = "ИзмШрифтToolStripMenuItem";
+            this.ИзмШрифтToolStripMenuItem.Size = new System.Drawing.Size(115, 20);
+            this.ИзмШрифтToolStripMenuItem.Text = "Изменить шрифт";
+            this.ИзмШрифтToolStripMenuItem.Click += new System.EventHandler(this.изменитьШрифтToolStripMenuItem_Click);
             // 
-            // вToolStripMenuItem
+            // СмПарольToolStripMenuItem
             // 
-            this.вToolStripMenuItem.Name = "вToolStripMenuItem";
-            this.вToolStripMenuItem.Size = new System.Drawing.Size(120, 20);
-            this.вToolStripMenuItem.Text = "Выйти из системы";
-            this.вToolStripMenuItem.Click += new System.EventHandler(this.вToolStripMenuItem_Click);
+            this.СмПарольToolStripMenuItem.Name = "СмПарольToolStripMenuItem";
+            this.СмПарольToolStripMenuItem.Size = new System.Drawing.Size(110, 20);
+            this.СмПарольToolStripMenuItem.Text = "Сменить пароль";
+            this.СмПарольToolStripMenuItem.Click += new System.EventHandler(this.сменитьПарольToolStripMenuItem_Click);
             // 
-            // оПрограммеToolStripMenuItem
+            // ВыйтиToolStripMenuItem
             // 
-            this.оПрограммеToolStripMenuItem.Name = "оПрограммеToolStripMenuItem";
-            this.оПрограммеToolStripMenuItem.Size = new System.Drawing.Size(94, 20);
-            this.оПрограммеToolStripMenuItem.Text = "О программе";
-            this.оПрограммеToolStripMenuItem.Click += new System.EventHandler(this.оПрограммеToolStripMenuItem_Click);
+            this.ВыйтиToolStripMenuItem.Name = "ВыйтиToolStripMenuItem";
+            this.ВыйтиToolStripMenuItem.Size = new System.Drawing.Size(120, 20);
+            this.ВыйтиToolStripMenuItem.Text = "Выйти из системы";
+            this.ВыйтиToolStripMenuItem.Click += new System.EventHandler(this.вToolStripMenuItem_Click);
             // 
-            // выходToolStripMenuItem
+            // ОпрогрToolStripMenuItem
             // 
-            this.выходToolStripMenuItem.Name = "выходToolStripMenuItem";
-            this.выходToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
-            this.выходToolStripMenuItem.Text = "Выход";
-            this.выходToolStripMenuItem.Click += new System.EventHandler(this.выходToolStripMenuItem_Click);
+            this.ОпрогрToolStripMenuItem.Name = "ОпрогрToolStripMenuItem";
+            this.ОпрогрToolStripMenuItem.Size = new System.Drawing.Size(94, 20);
+            this.ОпрогрToolStripMenuItem.Text = "О программе";
+            this.ОпрогрToolStripMenuItem.Click += new System.EventHandler(this.оПрограммеToolStripMenuItem_Click);
+            // 
+            // ВыходToolStripMenuItem
+            // 
+            this.ВыходToolStripMenuItem.Name = "ВыходToolStripMenuItem";
+            this.ВыходToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
+            this.ВыходToolStripMenuItem.Text = "Выход";
+            this.ВыходToolStripMenuItem.Click += new System.EventHandler(this.выходToolStripMenuItem_Click);
             // 
             // dataGridView1
             // 
@@ -250,7 +274,7 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.ReadOnly = true;
             this.dataGridView1.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.dataGridView1.Size = new System.Drawing.Size(849, 896);
+            this.dataGridView1.Size = new System.Drawing.Size(1063, 927);
             this.dataGridView1.TabIndex = 2;
             // 
             // label1
@@ -274,21 +298,14 @@
             this.panel1.Location = new System.Drawing.Point(121, 24);
             this.panel1.Name = "panel1";
             this.panel1.Padding = new System.Windows.Forms.Padding(0, 30, 0, 0);
-            this.panel1.Size = new System.Drawing.Size(849, 926);
+            this.panel1.Size = new System.Drawing.Size(1063, 957);
             this.panel1.TabIndex = 4;
-            // 
-            // приказыНаОтгрузкуToolStripMenuItem
-            // 
-            this.приказыНаОтгрузкуToolStripMenuItem.Name = "приказыНаОтгрузкуToolStripMenuItem";
-            this.приказыНаОтгрузкуToolStripMenuItem.Size = new System.Drawing.Size(134, 20);
-            this.приказыНаОтгрузкуToolStripMenuItem.Text = "Приказы на отгрузку";
-            this.приказыНаОтгрузкуToolStripMenuItem.Click += new System.EventHandler(this.приказыНаОтгрузкуToolStripMenuItem_Click);
             // 
             // First
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(970, 950);
+            this.ClientSize = new System.Drawing.Size(1184, 981);
             this.Controls.Add(this.panel1);
             this.Controls.Add(this.toolStrip1);
             this.Controls.Add(this.menuStrip1);
@@ -296,6 +313,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "First";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
+            this.Text = "Отгрузка";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.First_FormClosing);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
@@ -314,24 +332,25 @@
         private System.Windows.Forms.ToolStrip toolStrip1;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
         private System.Windows.Forms.ToolStripButton toolStripButton2;
-        private System.Windows.Forms.ToolStripButton toolStripButton3;
         private System.Windows.Forms.ToolStripButton toolStripButton4;
         private System.Windows.Forms.ToolStripButton toolStripButton5;
         private System.Windows.Forms.ToolStripButton toolStripButton6;
         private System.Windows.Forms.MenuStrip menuStrip1;
-        private System.Windows.Forms.ToolStripMenuItem обновитьToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ОбновитьToolStripMenuItem;
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.FontDialog fontDialog1;
-        private System.Windows.Forms.ToolStripMenuItem изменитьШрифтToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ИзмШрифтToolStripMenuItem;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Timer timer1;
-        private System.Windows.Forms.ToolStripMenuItem сменитьПарольToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem вToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem оПрограммеToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem выходToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem СмПарольToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ВыйтиToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ОпрогрToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ВыходToolStripMenuItem;
         private System.Windows.Forms.ToolStripButton toolStripButton7;
         private System.Windows.Forms.ToolStripButton toolStripButton8;
-        private System.Windows.Forms.ToolStripMenuItem приказыНаОтгрузкуToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem ПрикНаОтгрToolStripMenuItem;
+        private System.Windows.Forms.ToolStripButton toolStripButton9;
+        private System.Windows.Forms.ToolStripButton toolStripButton10;
     }
 }

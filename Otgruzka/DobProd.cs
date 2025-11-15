@@ -1,49 +1,56 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Data.OleDb;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
-using System.IO;
 
 namespace Otgruzka
 {
     public partial class DobProd : Form
     {
-        public static string connectString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\\Users\\user\\Desktop\\ДИПЛОМ\\Otgruzka\\Otgruzka\\newBD.accdb";
-        //public static string connectString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=|DataDirectory|newBD.accdb";
+        public event Action UpFirst;
+        private int tab_n;
+        private Metods metods;
 
-        private int labelWidth;
-     //   string prof = prof;
-
-        public DobProd()
+        public DobProd(int tab_nomer)
         {
+            tab_n = tab_nomer;
+
             InitializeComponent();
             Runner();
-            LoadProfil();
-            LoadDlina();
-            LoadKlass();
-            LoadStand();
+            LoadProd();
+
+            metods = new Metods();
+            FIO(tab_n);
+        }
+
+        private void FIO(int tab_n)
+        {
+            Tuple<string, string> result = metods.GetFIO(tab_n);
+
+            if (result == null) // Проверяем на null (ошибку)
+            {
+                MessageBox.Show("Ошибка: нет данных или сотрудник не найден.");
+            }
+            else
+            {
+                // Вставляем только ФИО без должности
+                textBox4.Text = result.Item1 + ", " + result.Item2;
+            }
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
             // Сдвигаем текст влево
             label2.Left -= 3;
-
             // Если текст вышел за пределы формы, перезапускаем его
             if (label2.Right < 0)
             {
                 label2.Left = this.ClientSize.Width; // Перемещаем текст обратно вправо
             }
         }
+
         private void Runner()
         {
+            int labelWidth;
             // Устанавливаем текст для бегущей строки
             label2.Text = "Если нужный выбор отсутствует - нажмите кнопку 'Добавить'";
             label2.AutoSize = true;
@@ -55,61 +62,14 @@ namespace Otgruzka
             timer.Start();
         }
 
-        private void LoadProfil()
+        private void LoadProd()
         {
-            using (OleDbConnection myConnection = new OleDbConnection(connectString))
-            {
-                myConnection.Open();
-                string query = "SELECT profil FROM profil"; // Запрос на получение названий
-                OleDbCommand command = new OleDbCommand(query, myConnection);
-                OleDbDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    comboBox1.Items.Add(reader["profil"].ToString()); // Добавляем названия в ComboBox
-                }
-            }
-        }
-        private void LoadDlina()
-        {
-            using (OleDbConnection myConnection = new OleDbConnection(connectString))
-                {
-                myConnection.Open();
-                string query = "SELECT dlina FROM dlina"; // Запрос на получение названий
-                OleDbCommand command = new OleDbCommand(query, myConnection);
-                OleDbDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    comboBox2.Items.Add(reader["dlina"].ToString()); // Добавляем названия в ComboBox
-                }
-            }
-        }
-        private void LoadKlass()
-        {
-            OleDbConnection myConnection = new OleDbConnection(connectString);
-            {
-                myConnection.Open();
-                string query = "SELECT marka FROM klass"; // Запрос на получение названий
-                OleDbCommand command = new OleDbCommand(query, myConnection);
-                OleDbDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    comboBox3.Items.Add(reader["marka"].ToString()); // Добавляем названия в ComboBox
-                }
-            }
-        }
-        private void LoadStand()
-        {
-            using (OleDbConnection myConnection = new OleDbConnection(connectString))
-                {
-                myConnection.Open();
-                string query = "SELECT standart FROM standart"; // Запрос на получение названий
-                OleDbCommand command = new OleDbCommand(query, myConnection);
-                OleDbDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    comboBox4.Items.Add(reader["standart"].ToString()); // Добавляем названия в ComboBox
-                }
-            }
+            string queryPr = "SELECT profil FROM profil";
+            string queryKl = "SELECT marka FROM klass";
+            string queryDl = "SELECT dlina FROM dlina";
+            Metods.LoadComboBoxData(queryPr, comboBox1);
+            Metods.LoadComboBoxData(queryDl, comboBox2);
+            Metods.LoadComboBoxData(queryKl, comboBox3);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -133,15 +93,9 @@ namespace Otgruzka
             dob3.Show();
         }
 
-        private void button4_Click(object sender, EventArgs e)
-        {
-            dob dob4 = new dob(4);
-            dob4.DataUpdated += DataUpdated;
-            dob4.Show();
-        }
-
         private void button6_Click(object sender, EventArgs e)
         {
+            UpFirst?.Invoke();
             this.Close();
         }
 
@@ -152,7 +106,7 @@ namespace Otgruzka
 
         private void button5_Click(object sender, EventArgs e)
         {
-            using (OleDbConnection myConnection = new OleDbConnection(connectString))
+            using (OleDbConnection myConnection = new OleDbConnection(Metods.ConnectionString))
             {
                 myConnection.Open();
 
@@ -160,142 +114,147 @@ namespace Otgruzka
                 {
                     if (comboBox1.SelectedItem == null)
                     {
-                        MessageBox.Show("Пожалуйста, выберите профиль.");
+                        MessageBox.Show("Пожалуйста, выберите профиль.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-                    int profil = Convert.ToInt32(comboBox1.SelectedItem.ToString());
-                    // Запрос для получения кода
-                    string queryProfil = @"SELECT Код FROM profil WHERE profil = @profil";
-                    int profilCode;
-
-                    using (OleDbCommand CommProfil = new OleDbCommand(queryProfil, myConnection))
-                    {
-                        CommProfil.Parameters.AddWithValue("@profil", profil);
-                        profilCode = (int)CommProfil.ExecuteScalar(); // Получаем код
-                    }
+                    int profilCode = Metods.GetCode("SELECT Код FROM profil WHERE profil = ?", comboBox1);
 
                     if (comboBox2.SelectedItem == null)
                     {
-                        MessageBox.Show("Пожалуйста, выберите длину.");
+                        MessageBox.Show("Пожалуйста, выберите длину.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-                    int dlina = Convert.ToInt32(comboBox2.SelectedItem.ToString());
-                    // Запрос для получения кода
-                    string queryDlina = @"SELECT Код FROM dlina WHERE dlina = @dlina";
-                    int dlinaCode;
-
-                    using (OleDbCommand CommDlina = new OleDbCommand(queryDlina, myConnection))
-                    {
-                        CommDlina.Parameters.AddWithValue("@dlina", dlina);
-                        dlinaCode = (int)CommDlina.ExecuteScalar(); // Получаем код
-                    }
+                    int dlinaCode = Metods.GetCode("SELECT Код FROM dlina WHERE dlina = ?", comboBox2); ;
 
                     if (comboBox3.SelectedItem == null)
                     {
-                        MessageBox.Show("Пожалуйста, выберите класс стали.");
+                        MessageBox.Show("Пожалуйста, выберите класс стали.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-                    string klass = comboBox3.SelectedItem.ToString();
-                    // Запрос для получения кода
-                    string queryKlass = @"SELECT Код FROM klass WHERE marka = @marka";
-                    int klassCode;
+                    int klassCode = Metods.GetCode("SELECT Код FROM klass WHERE marka = ?", comboBox3);
 
-                    using (OleDbCommand CommKlass = new OleDbCommand(queryKlass, myConnection))
+                    int plavka;
+                    if (string.IsNullOrWhiteSpace(textBox3.Text) || textBox3.Text.Length != 6 || !int.TryParse(textBox3.Text, out plavka))
                     {
-                        CommKlass.Parameters.AddWithValue("@marka", klass);
-                        klassCode = (int)CommKlass.ExecuteScalar(); // Получаем код
-                    }
-
-                    if (comboBox4.SelectedItem == null)
-                    {
-                        MessageBox.Show("Пожалуйста, выберите стандарт.");
+                        MessageBox.Show("Введите корректный номер плавки. Шесть цифр.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-                    string standart = comboBox4.SelectedItem.ToString();
-                    // Запрос для получения кода
-                    string queryStand = @"SELECT Код FROM standart WHERE standart = @standart";
-                    int standCode;
 
-                    using (OleDbCommand CommStand = new OleDbCommand(queryStand, myConnection))
+                    int paket;
+                    if (string.IsNullOrWhiteSpace(textBox2.Text) || !int.TryParse(textBox2.Text, out paket))
                     {
-                        CommStand.Parameters.AddWithValue("@standart", standart);
-                        standCode = (int)CommStand.ExecuteScalar(); // Получаем код
-                    }
-
-                    if (string.IsNullOrWhiteSpace(textBox1.Text))
-                    {
-                        MessageBox.Show("Пожалуйста, введите вес.");
+                        MessageBox.Show("Введите корректный номер пакета.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
 
                     double ves_izd;
-                    if (!double.TryParse(textBox1.Text, out ves_izd))
+                    if (string.IsNullOrWhiteSpace(textBox1.Text) || !double.TryParse(textBox1.Text, out ves_izd))
                     {
-                        MessageBox.Show("Введите корректное значение для веса.");
-                        return;
-                    }
-
-                    double price;
-                    if (!double.TryParse(textBox2.Text, out price))
-                    {
-                        MessageBox.Show("Введите корректное значение для цены.");
+                        MessageBox.Show("Введите корректное значение для веса.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
 
                     string date_post = dateTimePicker1.Value.ToShortDateString();
 
-                    string nomer_dok = textBox_dokum.Text;
+                    int dokum;
+                    if (string.IsNullOrWhiteSpace(textBox_dokum.Text) || !int.TryParse(textBox_dokum.Text, out dokum))
+                    {
+                        MessageBox.Show("Введите номер накладной. Только цифры.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        return;
+                    }
 
-                  //  double price = ves_izd * 10.12;
+                    int id_sotr = tab_n;
 
                     // Запрос INSERT
-                    string query = @"INSERT INTO Izdelie (profil, dlina, klass, standart, price, ves_izd, date_post, nomer_dok)
-                         VALUES (@profilCode, @dlinaCode, @klassCode, @standCode, @price, @ves_izd, @date_post, @nomer_dok);";
+                    string query = @"INSERT INTO Izdelie (plavka, profil, dlina, klass, paket, ves_izd, date_post, id_sotr, dokum)
+                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?);";
+
+                    Console.WriteLine($"plavka: {plavka}, profilCode: {profilCode}, dlinaCode: {dlinaCode}, klassCode: {klassCode}, paket: {paket}, ves_izd: {ves_izd}, date_post: {date_post}, id_sotr: {id_sotr}, dokum: {dokum}");
 
                     using (OleDbCommand command = new OleDbCommand(query, myConnection))
                     {
                         // Добавление параметров
-                        command.Parameters.AddWithValue("@profilCode", profilCode);
-                        command.Parameters.AddWithValue("@dlina", dlinaCode);
-                        command.Parameters.AddWithValue("@klass", klassCode);
-                        command.Parameters.AddWithValue("@standart", standCode);
-                        command.Parameters.AddWithValue("@price", price);
-                        command.Parameters.AddWithValue("@ves_izd", ves_izd);
-                        command.Parameters.AddWithValue("@date_post", date_post);
-                        command.Parameters.AddWithValue("@nomer_dok", nomer_dok);
+                        command.Parameters.AddWithValue("?", plavka);
+                        command.Parameters.AddWithValue("?", profilCode);
+                        command.Parameters.AddWithValue("?", dlinaCode);
+                        command.Parameters.AddWithValue("?", klassCode);
+                        command.Parameters.AddWithValue("?", paket);
+                        command.Parameters.AddWithValue("?", ves_izd);
+                        command.Parameters.AddWithValue("?", date_post);
+                        command.Parameters.AddWithValue("?", id_sotr);
+                        command.Parameters.AddWithValue("?", dokum);
 
                         command.ExecuteNonQuery();
-                        MessageBox.Show("Добавлено");
+                        MessageBox.Show("Успешно", "Добавлено");
                     }
                 }
                 catch (Exception ex)
                 {
                     MessageBox.Show("Ошибка: " + ex.Message);
+                    Console.WriteLine("Ошибка: " + ex.Message);
                 }
             }
-            this.Close();
-        }
+            DialogResult result = MessageBox.Show(
+            "Необходимо добавить еще пакет в данную плавку?",
+            " ",
+            MessageBoxButtons.YesNo,
+            MessageBoxIcon.Information,
+            MessageBoxDefaultButton.Button1,
+            MessageBoxOptions.DefaultDesktopOnly);
 
-        private void button8_Click(object sender, EventArgs e)
-        {
-            comboBox1.SelectedIndex = -1;
-            comboBox2.SelectedIndex = -1;
-            comboBox3.SelectedIndex = -1;
-            comboBox4.SelectedIndex = -1;
-            textBox1.Clear();
-            textBox2.Clear();
+
+            if (result == DialogResult.Yes)
+            {
+                DobPak();
+                textBox2.Focus();
+                this.Activate();
+            }
+            else
+            {
+                UpFirst?.Invoke();
+                this.Close();
+            }
         }
 
         private void DataUpdated()
         {
+            textBox1.Clear();
+            textBox2.Clear();
+            textBox3.Clear();
+            textBox_dokum.Clear();
+
             comboBox1.Items.Clear();
             comboBox2.Items.Clear();
             comboBox3.Items.Clear();
-            comboBox4.Items.Clear();
-            LoadProfil();
-            LoadDlina();
-            LoadKlass();
-            LoadStand();
+
+            comboBox1.Text = "";
+            comboBox2.Text = "";
+            comboBox3.Text = "";
+
+            comboBox1.Enabled = true;
+            button1.Enabled = true;
+            comboBox2.Enabled = true;
+            button2.Enabled = true;
+            comboBox3.Enabled = true;
+            button3.Enabled = true;
+            textBox_dokum.Enabled = true;
+            textBox3.Enabled = true;
+
+            LoadProd();
+        }
+
+        private void DobPak()
+        {
+            comboBox1.Enabled = false;
+            button1.Enabled = false;
+            comboBox2.Enabled = false;
+            button2.Enabled = false;
+            comboBox3.Enabled = false;
+            button3.Enabled = false;
+            textBox_dokum.Enabled = false;
+            textBox3.Enabled = false;
+            textBox2.Clear();
+            textBox1.Clear();
         }
     }
 }

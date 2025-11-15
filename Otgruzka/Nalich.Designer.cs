@@ -41,8 +41,16 @@
             this.изменитьШрифтToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.обновитьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.закрытьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.печатьToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.предварительныйПросмотрToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.печатьToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.сохранитьВФайлToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.dataGridView1 = new System.Windows.Forms.DataGridView();
             this.fontDialog1 = new System.Windows.Forms.FontDialog();
+            this.printPreviewDialog1 = new System.Windows.Forms.PrintPreviewDialog();
+            this.printDocument1 = new System.Drawing.Printing.PrintDocument();
+            this.printDialog1 = new System.Windows.Forms.PrintDialog();
+            this.pageSetupDialog1 = new System.Windows.Forms.PageSetupDialog();
             this.tableLayoutPanel1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -80,10 +88,10 @@
             // 
             this.comboBoxData.Dock = System.Windows.Forms.DockStyle.Fill;
             this.comboBoxData.FormattingEnabled = true;
-            this.comboBoxData.Location = new System.Drawing.Point(816, 0);
+            this.comboBoxData.Location = new System.Drawing.Point(810, 0);
             this.comboBoxData.Margin = new System.Windows.Forms.Padding(0);
             this.comboBoxData.Name = "comboBoxData";
-            this.comboBoxData.Size = new System.Drawing.Size(136, 21);
+            this.comboBoxData.Size = new System.Drawing.Size(142, 21);
             this.comboBoxData.TabIndex = 7;
             this.comboBoxData.Tag = "";
             // 
@@ -91,10 +99,10 @@
             // 
             this.comboBoxVes.Dock = System.Windows.Forms.DockStyle.Fill;
             this.comboBoxVes.FormattingEnabled = true;
-            this.comboBoxVes.Location = new System.Drawing.Point(680, 0);
+            this.comboBoxVes.Location = new System.Drawing.Point(675, 0);
             this.comboBoxVes.Margin = new System.Windows.Forms.Padding(0);
             this.comboBoxVes.Name = "comboBoxVes";
-            this.comboBoxVes.Size = new System.Drawing.Size(136, 21);
+            this.comboBoxVes.Size = new System.Drawing.Size(135, 21);
             this.comboBoxVes.TabIndex = 6;
             this.comboBoxVes.Tag = "";
             // 
@@ -102,10 +110,10 @@
             // 
             this.comboBoxPak.Dock = System.Windows.Forms.DockStyle.Fill;
             this.comboBoxPak.FormattingEnabled = true;
-            this.comboBoxPak.Location = new System.Drawing.Point(544, 0);
+            this.comboBoxPak.Location = new System.Drawing.Point(540, 0);
             this.comboBoxPak.Margin = new System.Windows.Forms.Padding(0);
             this.comboBoxPak.Name = "comboBoxPak";
-            this.comboBoxPak.Size = new System.Drawing.Size(136, 21);
+            this.comboBoxPak.Size = new System.Drawing.Size(135, 21);
             this.comboBoxPak.TabIndex = 5;
             this.comboBoxPak.Tag = "";
             // 
@@ -113,10 +121,10 @@
             // 
             this.comboBoxPlav.Dock = System.Windows.Forms.DockStyle.Fill;
             this.comboBoxPlav.FormattingEnabled = true;
-            this.comboBoxPlav.Location = new System.Drawing.Point(408, 0);
+            this.comboBoxPlav.Location = new System.Drawing.Point(405, 0);
             this.comboBoxPlav.Margin = new System.Windows.Forms.Padding(0);
             this.comboBoxPlav.Name = "comboBoxPlav";
-            this.comboBoxPlav.Size = new System.Drawing.Size(136, 21);
+            this.comboBoxPlav.Size = new System.Drawing.Size(135, 21);
             this.comboBoxPlav.TabIndex = 4;
             this.comboBoxPlav.Tag = "";
             // 
@@ -124,10 +132,10 @@
             // 
             this.comboBoxKl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.comboBoxKl.FormattingEnabled = true;
-            this.comboBoxKl.Location = new System.Drawing.Point(272, 0);
+            this.comboBoxKl.Location = new System.Drawing.Point(270, 0);
             this.comboBoxKl.Margin = new System.Windows.Forms.Padding(0);
             this.comboBoxKl.Name = "comboBoxKl";
-            this.comboBoxKl.Size = new System.Drawing.Size(136, 21);
+            this.comboBoxKl.Size = new System.Drawing.Size(135, 21);
             this.comboBoxKl.TabIndex = 2;
             this.comboBoxKl.Tag = "";
             // 
@@ -135,10 +143,10 @@
             // 
             this.comboBoxDl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.comboBoxDl.FormattingEnabled = true;
-            this.comboBoxDl.Location = new System.Drawing.Point(136, 0);
+            this.comboBoxDl.Location = new System.Drawing.Point(135, 0);
             this.comboBoxDl.Margin = new System.Windows.Forms.Padding(0);
             this.comboBoxDl.Name = "comboBoxDl";
-            this.comboBoxDl.Size = new System.Drawing.Size(136, 21);
+            this.comboBoxDl.Size = new System.Drawing.Size(135, 21);
             this.comboBoxDl.TabIndex = 1;
             this.comboBoxDl.Tag = "";
             // 
@@ -149,13 +157,14 @@
             this.comboBoxProf.Location = new System.Drawing.Point(0, 0);
             this.comboBoxProf.Margin = new System.Windows.Forms.Padding(0);
             this.comboBoxProf.Name = "comboBoxProf";
-            this.comboBoxProf.Size = new System.Drawing.Size(136, 21);
+            this.comboBoxProf.Size = new System.Drawing.Size(135, 21);
             this.comboBoxProf.TabIndex = 0;
             this.comboBoxProf.Tag = "";
             // 
             // menuStrip1
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.печатьToolStripMenuItem,
             this.изменитьШрифтToolStripMenuItem,
             this.обновитьToolStripMenuItem,
             this.закрытьToolStripMenuItem});
@@ -186,6 +195,37 @@
             this.закрытьToolStripMenuItem.Text = "Закрыть";
             this.закрытьToolStripMenuItem.Click += new System.EventHandler(this.закрытьToolStripMenuItem_Click);
             // 
+            // печатьToolStripMenuItem
+            // 
+            this.печатьToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.предварительныйПросмотрToolStripMenuItem,
+            this.печатьToolStripMenuItem1,
+            this.сохранитьВФайлToolStripMenuItem});
+            this.печатьToolStripMenuItem.Name = "печатьToolStripMenuItem";
+            this.печатьToolStripMenuItem.Size = new System.Drawing.Size(110, 20);
+            this.печатьToolStripMenuItem.Text = "Вывод на печать";
+            // 
+            // предварительныйПросмотрToolStripMenuItem
+            // 
+            this.предварительныйПросмотрToolStripMenuItem.Name = "предварительныйПросмотрToolStripMenuItem";
+            this.предварительныйПросмотрToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+            this.предварительныйПросмотрToolStripMenuItem.Text = "Предварительный просмотр";
+            this.предварительныйПросмотрToolStripMenuItem.Click += new System.EventHandler(this.предварительныйПросмотрToolStripMenuItem_Click);
+            // 
+            // печатьToolStripMenuItem1
+            // 
+            this.печатьToolStripMenuItem1.Name = "печатьToolStripMenuItem1";
+            this.печатьToolStripMenuItem1.Size = new System.Drawing.Size(233, 22);
+            this.печатьToolStripMenuItem1.Text = "Печать";
+            this.печатьToolStripMenuItem1.Click += new System.EventHandler(this.печатьToolStripMenuItem1_Click);
+            // 
+            // сохранитьВФайлToolStripMenuItem
+            // 
+            this.сохранитьВФайлToolStripMenuItem.Name = "сохранитьВФайлToolStripMenuItem";
+            this.сохранитьВФайлToolStripMenuItem.Size = new System.Drawing.Size(233, 22);
+            this.сохранитьВФайлToolStripMenuItem.Text = "Открыть в Excell";
+            this.сохранитьВФайлToolStripMenuItem.Click += new System.EventHandler(this.сохранитьВФайлToolStripMenuItem_Click);
+            // 
             // dataGridView1
             // 
             this.dataGridView1.AutoSizeColumnsMode = System.Windows.Forms.DataGridViewAutoSizeColumnsMode.Fill;
@@ -196,6 +236,24 @@
             this.dataGridView1.Name = "dataGridView1";
             this.dataGridView1.Size = new System.Drawing.Size(969, 506);
             this.dataGridView1.TabIndex = 2;
+            // 
+            // printPreviewDialog1
+            // 
+            this.printPreviewDialog1.AutoScrollMargin = new System.Drawing.Size(0, 0);
+            this.printPreviewDialog1.AutoScrollMinSize = new System.Drawing.Size(0, 0);
+            this.printPreviewDialog1.ClientSize = new System.Drawing.Size(400, 300);
+            this.printPreviewDialog1.Enabled = true;
+            this.printPreviewDialog1.Icon = ((System.Drawing.Icon)(resources.GetObject("printPreviewDialog1.Icon")));
+            this.printPreviewDialog1.Name = "printPreviewDialog1";
+            this.printPreviewDialog1.Visible = false;
+            // 
+            // printDocument1
+            // 
+            this.printDocument1.PrintPage += new System.Drawing.Printing.PrintPageEventHandler(this.printDocument1_PrintPage);
+            // 
+            // printDialog1
+            // 
+            this.printDialog1.UseEXDialog = true;
             // 
             // Nalich
             // 
@@ -235,5 +293,13 @@
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.FontDialog fontDialog1;
         private System.Windows.Forms.ToolStripMenuItem изменитьШрифтToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem печатьToolStripMenuItem;
+        private System.Windows.Forms.PrintPreviewDialog printPreviewDialog1;
+        private System.Drawing.Printing.PrintDocument printDocument1;
+        private System.Windows.Forms.ToolStripMenuItem предварительныйПросмотрToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem печатьToolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem сохранитьВФайлToolStripMenuItem;
+        private System.Windows.Forms.PrintDialog printDialog1;
+        private System.Windows.Forms.PageSetupDialog pageSetupDialog1;
     }
 }

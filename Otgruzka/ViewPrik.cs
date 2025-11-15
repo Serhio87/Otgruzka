@@ -1,21 +1,13 @@
-﻿using Microsoft.Reporting.WinForms;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System;
 using System.Data;
-using System.Data.Common;
 using System.Data.OleDb;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Otgruzka
 {
-    public partial class ViewPrik: Form
+    public partial class ViewPrik : Form
     {
-        public static string connectString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\\Users\\user\\Desktop\\ДИПЛОМ\\Otgruzka\\Otgruzka\\newBD.accdb";
         private DataTable db;
         private BindingSource bindingSource = new BindingSource();
 
@@ -24,23 +16,24 @@ namespace Otgruzka
             InitializeComponent();
             LoadData();
             Runner();
+
+            // Регистрация события
+            dataGridView1.DataBindingComplete += dataGridView1_DataBindingComplete;
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
             // Сдвигаем текст влево
             label1.Left -= 2;
-
             // Если текст вышел за пределы формы, перезапускаем его
             if (label1.Right < 0)
             {
                 label1.Left = this.ClientSize.Width; // Перемещаем текст обратно вправо
             }
         }
+
         private void Runner()
         {
-            // Устанавливаем текст для бегущей строки
-        //    label1.Text = "Текущее наличие продукции на складе";
             label1.AutoSize = true;
             int labelWidth = label1.Width;
             // Устанавливаем таймер
@@ -52,30 +45,26 @@ namespace Otgruzka
 
         private void LoadData()
         {
-            using (OleDbConnection conn = new OleDbConnection(connectString))
+            using (OleDbConnection conn = new OleDbConnection(Metods.ConnectionString))
             {
                 try
                 {
-                    string query = @"SELECT Prikaz.id_prik AS [№ Приказа], 
-pokupatel.nazvanie AS [Покупатель], 
-pokupatel.gorod AS [Город], 
-pokupatel.strana AS [Страна], 
-Prikaz.prof AS [Профиль], 
-Prikaz.dlina AS [Длина], 
-Prikaz.klass AS [Класс стали], 
-Prikaz.ves AS [Объем поставки], 
-Prikaz.date_prik AS [Дата составления], 
-dolzhnost.dolzhn AS [Должность], 
-sotrudniki.fam AS [Фамилия], 
-Prikaz.ispoln AS [Дата отгрузки], 
-Prikaz.kolich AS [Кол-во отгружено]
-FROM dolzhnost 
-INNER JOIN (sotrudniki 
-INNER JOIN (pokupatel 
-INNER JOIN Prikaz 
-ON pokupatel.Код = Prikaz.pokup) 
-ON sotrudniki.tab_nomer = Prikaz.ekon) 
-ON dolzhnost.Код = sotrudniki.dolzhn;";
+                    string query = @"SELECT Prikaz.id_prik      AS [№ Приказа], 
+                                            pokupatel.nazvanie  AS [Покупатель], 
+                                            pokupatel.gorod     AS [Город], 
+                                            pokupatel.strana    AS [Страна], 
+                                            Prikaz.prof         AS [Профиль], 
+                                            Prikaz.dlina        AS [Длина], 
+                                            Prikaz.klass        AS [Класс стали], 
+                                            Prikaz.ves          AS [Объем поставки], 
+                                            Prikaz.date_prik    AS [Дата составления], 
+                                            dolzhnost.dolzhn    AS [Должность], 
+                                            sotrudniki.fam      AS [Фамилия], 
+                                            Prikaz.ispoln       AS [Дата отгрузки], 
+                                            Prikaz.kolich       AS [Кол-во отгружено]
+                                       FROM dolzhnost 
+                                 INNER JOIN (sotrudniki INNER JOIN (pokupatel INNER JOIN Prikaz 
+                                         ON pokupatel.Код = Prikaz.pokup) ON sotrudniki.tab_nomer = Prikaz.ekon) ON dolzhnost.Код = sotrudniki.dolzhn;";
 
                     OleDbDataAdapter adapter = new OleDbDataAdapter(query, conn);
                     db = new DataTable();
@@ -92,11 +81,34 @@ ON dolzhnost.Код = sotrudniki.dolzhn;";
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
 
             //изменение шрифта
-            dataGridView1.DefaultCellStyle.Font = new Font("Times New Roman", 10);
+            dataGridView1.DefaultCellStyle.Font = new Font("Times New Roman", 12);
             dataGridView1.ColumnHeadersDefaultCellStyle.Font = new Font("Times New Roman", 12, FontStyle.Bold); //заголовок
 
             dataGridView1.RowHeadersVisible = false;
         }
+
+        //форматирование строки в dataGridView
+        private void dataGridView1_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            foreach (DataGridViewRow row in dataGridView1.Rows)
+            {
+                string prikStr = row.Cells[7].Value.ToString();
+                string otgrStr = row.Cells[12].Value.ToString();
+
+                int prikValue;
+                decimal otgrValue;
+
+                if (int.TryParse(prikStr, out prikValue) && decimal.TryParse(otgrStr, out otgrValue))
+                {
+                    decimal res = otgrValue - prikValue;
+                    if (res > 0)
+                    {
+                        row.DefaultCellStyle.Font = new Font("Times New Roman", 12, FontStyle.Strikeout);
+                    }
+                }
+            }
+        }
+
         private void button1_Click(object sender, EventArgs e)
         {
             this.Close();

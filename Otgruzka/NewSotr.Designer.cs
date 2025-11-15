@@ -129,7 +129,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label5.Location = new System.Drawing.Point(396, 258);
+            this.label5.Location = new System.Drawing.Point(405, 260);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(112, 24);
             this.label5.TabIndex = 8;
@@ -148,7 +148,7 @@
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
-            this.label6.Location = new System.Drawing.Point(352, 168);
+            this.label6.Location = new System.Drawing.Point(361, 168);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(156, 24);
             this.label6.TabIndex = 10;
@@ -181,10 +181,10 @@
             // comboBox1
             // 
             this.comboBox1.FormattingEnabled = true;
-            this.comboBox1.Location = new System.Drawing.Point(514, 260);
+            this.comboBox1.Location = new System.Drawing.Point(523, 260);
             this.comboBox1.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
             this.comboBox1.Name = "comboBox1";
-            this.comboBox1.Size = new System.Drawing.Size(147, 25);
+            this.comboBox1.Size = new System.Drawing.Size(138, 25);
             this.comboBox1.TabIndex = 14;
             // 
             // button_photo
@@ -222,7 +222,6 @@
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 17F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(706, 480);
-            this.ControlBox = false;
             this.Controls.Add(this.textBox_photo);
             this.Controls.Add(this.pictureBox1);
             this.Controls.Add(this.button_photo);
@@ -243,6 +242,8 @@
             this.Font = new System.Drawing.Font("Impact", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(204)));
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Margin = new System.Windows.Forms.Padding(3, 4, 3, 4);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
             this.Name = "NewSotr";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Новый сотрудник";

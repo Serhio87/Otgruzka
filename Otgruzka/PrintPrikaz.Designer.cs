@@ -52,7 +52,6 @@
             this.Name = "PrintPrikaz";
             this.ShowInTaskbar = false;
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
-            this.Text = "PrintPrikaz";
             this.Load += new System.EventHandler(this.PrintPrikaz_Load);
             this.ResumeLayout(false);
 

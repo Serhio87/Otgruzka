@@ -1,43 +1,22 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Data.Common;
 using System.Data.OleDb;
 using System.Drawing;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Otgruzka
 {
     public partial class NewSotr : Form
     {
-        public static string connectString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\\Users\\user\\Desktop\\ДИПЛОМ\\Otgruzka\\Otgruzka\\newBD.accdb";
-        //public static string connectString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=|DataDirectory|newBD.accdb";
-
+        private Metods hashPass = new Metods();
         // Определяем событие
         public event Action DataUpdated;
+        private string queryDol = "SELECT dolzhn FROM dolzhnost WHERE dolzhn Not In (\"ADMIN\");";
 
         public NewSotr()
         {
             InitializeComponent();
-            LoadDolzhnost();
-        }
-
-        private void LoadDolzhnost()
-        {
-            OleDbConnection myConnection = new OleDbConnection(connectString);
-                myConnection.Open();
-                string query = "SELECT dolzhn FROM dolzhnost"; // Запрос на получение названий должностей
-                OleDbCommand command = new OleDbCommand(query, myConnection);
-                OleDbDataReader reader = command.ExecuteReader();
-                while (reader.Read())
-                {
-                    comboBox1.Items.Add(reader["dolzhn"].ToString()); // Добавляем названия в ComboBox
-                }
+            Metods.LoadComboBoxData(queryDol, comboBox1);
         }
 
         private void button2_Click(object sender, EventArgs e)
@@ -47,9 +26,9 @@ namespace Otgruzka
 
         private void button1_Click(object sender, EventArgs e)
         {
-            using (OleDbConnection myConnection = new OleDbConnection(connectString))
+            using (OleDbConnection conn = new OleDbConnection(Metods.ConnectionString))
             {
-                myConnection.Open();
+                conn.Open();
 
                 try
                 {
@@ -63,19 +42,9 @@ namespace Otgruzka
                         MessageBox.Show("Пожалуйста, выберите должность.");
                         return;
                     }
-                    string dolzhn = comboBox1.SelectedItem.ToString();
+                    int dolzhnCode = Metods.GetCode("SELECT Код FROM dolzhnost WHERE dolzhn = ? ", comboBox1);
 
-                    int password = Convert.ToInt32(textBox6.Text);
-
-                    // Запрос для получения кода должности
-                    string queryDolzhn = @"SELECT Код FROM dolzhnost WHERE dolzhn = @dolzhn";
-                    int dolzhnCode;
-
-                    using (OleDbCommand CommDolzhn = new OleDbCommand(queryDolzhn, myConnection))
-                    {
-                        CommDolzhn.Parameters.AddWithValue("@dolzhn", dolzhn);
-                        dolzhnCode = (int)CommDolzhn.ExecuteScalar(); // Получаем код должности
-                    }
+                    string password = hashPass.HashPassword(textBox6.Text);
 
                     // Получаем путь к изображению
                     string imagePath = textBox_photo.Text;
@@ -89,8 +58,8 @@ namespace Otgruzka
                     string extension = Path.GetExtension(imagePath);
 
                     // Копируем изображение в целевую директорию
-                    string directory = @"C:\Users\user\Desktop\ДИПЛОМ\Otgruzka\Sotr";
-                    string FilePath = Path.Combine(directory, $"{tab_nomer}{extension}"); //табельный номер как имя файла
+                    string directory = Metods.DirectoryPhoto;
+                    string FilePath = Path.Combine(directory, $"{tab_nomer}-{fam}{extension}"); //табельный номер и фамилия как имя файла
 
                     // Если файл уже существует, можно переименовать его или перезаписать
                     if (File.Exists(FilePath))
@@ -101,18 +70,18 @@ namespace Otgruzka
 
                     // Запрос INSERT
                     string query = @"INSERT INTO sotrudniki (tab_nomer, fam, im, otch, dolzhn, [password], photo)
-                         VALUES (@tab_nomer, @fam, @im, @otch, @dolzhnCode, @password, @photo);";
+                                     VALUES (?, ?, ?, ?, ?, ?, ?);";
 
-                    using (OleDbCommand command = new OleDbCommand(query, myConnection))
+                    using (OleDbCommand command = new OleDbCommand(query, conn))
                     {
                         // Добавление параметров
-                        command.Parameters.AddWithValue("@tab_nomer", tab_nomer);
-                        command.Parameters.AddWithValue("@fam", fam);
-                        command.Parameters.AddWithValue("@im", im);
-                        command.Parameters.AddWithValue("@otch", otch);
-                        command.Parameters.AddWithValue("@dolzhnCode", dolzhnCode); // Используем код должности
-                        command.Parameters.AddWithValue("@password", password);
-                        command.Parameters.AddWithValue("@photo", FilePath); // Сохраняем путь к изображению
+                        command.Parameters.AddWithValue("?", tab_nomer);
+                        command.Parameters.AddWithValue("?", fam);
+                        command.Parameters.AddWithValue("?", im);
+                        command.Parameters.AddWithValue("?", otch);
+                        command.Parameters.AddWithValue("?", dolzhnCode); // Используем код должности
+                        command.Parameters.AddWithValue("?", password);
+                        command.Parameters.AddWithValue("?", FilePath); // Сохраняем путь к изображению
 
                         command.ExecuteNonQuery();
                         MessageBox.Show("Ура! У нас новый сотрудник!");
@@ -120,12 +89,12 @@ namespace Otgruzka
                 }
                 catch (Exception ex)
                 {
+                    MessageBox.Show("Данный табельный номер уже используется!", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Stop);
                     MessageBox.Show("Ошибка: " + ex.Message);
                 }
             }
             // Вызываем событие перед закрытием формы
             DataUpdated?.Invoke();
-
             this.Close();
         }
 

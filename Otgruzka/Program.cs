@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Otgruzka
@@ -18,12 +14,12 @@ namespace Otgruzka
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-        //    Application.Run(new enterBox());
+            //Application.Run(new enterBox());
 
-                //вход без пароля мастером
-            string FIO = "Мастер На Все Руки";
-            string dolzhn = "Мастер";
-            Application.Run(new First(dolzhn, FIO, 9));
+            //вход без пароля для ADMIN
+            string FIO = "ADMIN";
+            string dolzhn = "ADMIN";
+            Application.Run(new First(dolzhn, FIO, 1));
         }
     }
 }
