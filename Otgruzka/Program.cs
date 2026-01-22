@@ -14,12 +14,12 @@ namespace Otgruzka
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
-            //Application.Run(new enterBox());
+            Application.Run(new enterBox());
 
             //вход без пароля для ADMIN
-            string FIO = "ADMIN";
-            string dolzhn = "ADMIN";
-            Application.Run(new First(dolzhn, FIO, 1));
+            //string FIO = "ADMIN";
+            //string dolzhn = "ADMIN";
+            //Application.Run(new First(dolzhn, FIO, 1));
         }
     }
 }

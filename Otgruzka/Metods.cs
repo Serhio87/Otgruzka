@@ -14,7 +14,7 @@ namespace Otgruzka
         //строка подключения к БД и указание расположений
         static Metods()
         {
-            ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\\Users\\user\\Desktop\\ДИПЛОМ\\Otgruzka\\Otgruzka\\newBD.accdb";
+            ConnectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=H:\\ДИПЛОМ\\Otgruzka\\Otgruzka\\newBD.accdb";
             //connectionString = "Provider=Microsoft.ACE.OLEDB.12.0;Data Source=C:\\Users\\user\\Desktop\\ДИПЛОМ\\Otgruzka\\Otgruzka\\newBD2.accdb";
             DirectoryPhoto = @"C:\Users\user\Desktop\ДИПЛОМ\Otgruzka\Sotr"; //папка для фото сотрудников
             InventPrikFile = @"C:\Users\user\Desktop\ДИПЛОМ\Otgruzka\Otgruzka\bin\Debug\Resources\Prikaz_o_provedenii_inventarizacii_aktivov_i_obyazatelstv.doc"; //размещение приказа

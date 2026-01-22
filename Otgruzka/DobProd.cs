@@ -124,7 +124,7 @@ namespace Otgruzka
                         MessageBox.Show("Пожалуйста, выберите длину.", "Ошибка", MessageBoxButtons.OK, MessageBoxIcon.Error);
                         return;
                     }
-                    int dlinaCode = Metods.GetCode("SELECT Код FROM dlina WHERE dlina = ?", comboBox2); ;
+                    int dlinaCode = Metods.GetCode("SELECT Код FROM dlina WHERE dlina = ?", comboBox2);
 
                     if (comboBox3.SelectedItem == null)
                     {
